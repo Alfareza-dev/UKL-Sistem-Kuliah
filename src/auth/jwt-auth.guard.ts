@@ -27,10 +27,10 @@ export class JwtAuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
-        secret: 'Secret_Key',
-      });
+      // ❗ tidak perlu pass secret lagi di sini
+      const payload = await this.jwtService.verifyAsync(token);
 
+      // simpan ke request.user
       request.user = payload;
 
       return true;

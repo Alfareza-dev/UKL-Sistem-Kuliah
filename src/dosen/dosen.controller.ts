@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   UseGuards,
+  NotFoundException,
 } from '@nestjs/common';
 import { DosenService } from './dosen.service';
 import { CreateDosenDto } from './dto/create-dosen.dto';
@@ -20,24 +21,33 @@ import { Roles } from '../auth/roles.decorator';
 @Controller('dosen')
 export class DosenController {
   constructor(private readonly dosenService: DosenService) {}
-
   @Post()
   async create(@Body() createDosenDto: CreateDosenDto) {
     const dosen = await this.dosenService.create(createDosenDto);
     return {
       status: 'success',
       message: 'Dosen added successfully',
-      data: dosen,
+      data: {
+        nidn: dosen.nidn,
+        nama_dosen: dosen.nama_dosen,
+        jenis_kelamin: dosen.jenis_kelamin,
+        alamat: dosen.alamat,
+      },
     };
   }
 
   @Get()
   async findAll() {
-    const dosen = await this.dosenService.findAll();
+    const list = await this.dosenService.findAll();
     return {
       status: 'success',
       message: 'Data dosen retrieved successfully',
-      data: dosen,
+      data: list.map((d) => ({
+        nidn: d.nidn,
+        nama_dosen: d.nama_dosen,
+        jenis_kelamin: d.jenis_kelamin,
+        alamat: d.alamat,
+      })),
     };
   }
 
@@ -45,10 +55,23 @@ export class DosenController {
   async findOne(@Param('nidn') nidnParam: string) {
     const nidn = parseInt(nidnParam, 10);
     const dosen = await this.dosenService.findOneByNidn(nidn);
+
+    if (!dosen) {
+      throw new NotFoundException({
+        status: 'error',
+        message: 'Dosen not found',
+      });
+    }
+
     return {
       status: 'success',
       message: 'Dosen retrieved successfully',
-      data: dosen,
+      data: {
+        nidn: dosen.nidn,
+        nama_dosen: dosen.nama_dosen,
+        jenis_kelamin: dosen.jenis_kelamin,
+        alamat: dosen.alamat,
+      },
     };
   }
 
@@ -62,7 +85,12 @@ export class DosenController {
     return {
       status: 'success',
       message: 'Dosen updated successfully',
-      data: dosen,
+      data: {
+        nidn: dosen.nidn,
+        nama_dosen: dosen.nama_dosen,
+        jenis_kelamin: dosen.jenis_kelamin,
+        alamat: dosen.alamat,
+      },
     };
   }
 
