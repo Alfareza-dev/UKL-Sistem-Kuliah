@@ -21,6 +21,7 @@ import { Roles } from '../auth/roles.decorator';
 @Controller('matakuliah')
 export class MatakuliahController {
   constructor(private readonly matakuliahService: MatakuliahService) {}
+
   @Post()
   async create(@Body() dto: CreateMatakuliahDto) {
     const mk = await this.matakuliahService.create(dto);
@@ -31,7 +32,7 @@ export class MatakuliahController {
       data: {
         id_matakuliah: mk.id_matakuliah,
         nama_matakuliah: mk.nama_matakuliah,
-        id_dosen: mk.id_dosen,
+        id_dosen: mk.dosen_nidn,
         sks: mk.sks,
       },
     };
@@ -47,7 +48,7 @@ export class MatakuliahController {
       data: list.map((mk) => ({
         id_matakuliah: mk.id_matakuliah,
         nama_matakuliah: mk.nama_matakuliah,
-        id_dosen: mk.id_dosen,
+        id_dosen: mk.dosen_nidn,
         sks: mk.sks,
       })),
     };
@@ -71,7 +72,7 @@ export class MatakuliahController {
       data: {
         id_matakuliah: mk.id_matakuliah,
         nama_matakuliah: mk.nama_matakuliah,
-        id_dosen: mk.id_dosen,
+        id_dosen: mk.dosen_nidn,
         sks: mk.sks,
       },
     };
@@ -91,7 +92,7 @@ export class MatakuliahController {
       data: {
         id_matakuliah: mk.id_matakuliah,
         nama_matakuliah: mk.nama_matakuliah,
-        id_dosen: mk.id_dosen,
+        id_dosen: mk.dosen_nidn,
         sks: mk.sks,
       },
     };

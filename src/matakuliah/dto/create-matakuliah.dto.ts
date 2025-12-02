@@ -1,5 +1,5 @@
 export class CreateMatakuliahDto {
-  nama_matakuliah: string; // required
-  id_dosen: number; // required, foreign key ke Dosen.id
-  sks: number; // required, 1–6
+  nama_matakuliah: string;
+  id_dosen: number; // ini akan di-mapping ke dosen_nidn
+  sks: number;
 }

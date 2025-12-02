@@ -21,8 +21,8 @@ export class MatakuliahService {
       const mk = await this.prisma.matakuliah.create({
         data: {
           nama_matakuliah,
-          id_dosen,
           sks,
+          dosen_nidn: id_dosen,
         },
       });
 
@@ -31,7 +31,7 @@ export class MatakuliahService {
       if (error.code === 'P2003') {
         throw new BadRequestException({
           status: 'error',
-          message: `Dosen dengan id ${id_dosen} tidak ditemukan`,
+          message: `Dosen dengan NIDN ${id_dosen} tidak ditemukan`,
         });
       }
 
@@ -78,8 +78,15 @@ export class MatakuliahService {
     try {
       const mk = await this.prisma.matakuliah.update({
         where: { id_matakuliah },
-        data: dto,
+        data: {
+          nama_matakuliah: dto.nama_matakuliah,
+          sks: dto.sks,
+          ...(dto.id_dosen !== undefined && {
+            dosen_nidn: dto.id_dosen,
+          }),
+        },
       });
+
       return mk;
     } catch (error) {
       if (error.code === 'P2025') {
@@ -92,7 +99,7 @@ export class MatakuliahService {
       if (error.code === 'P2003') {
         throw new BadRequestException({
           status: 'error',
-          message: `Dosen dengan id ${dto.id_dosen} tidak ditemukan`,
+          message: `Dosen dengan NIDN ${dto.id_dosen} tidak ditemukan`,
         });
       }
 

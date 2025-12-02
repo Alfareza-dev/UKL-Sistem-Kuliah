@@ -42,15 +42,15 @@ model Mahasiswa {
 }
 
 model Matakuliah {
-  id_matakuliah   Int    @id @default(autoincrement())
-  nama_matakuliah String
-  sks             Int
+  id_matakuliah    Int     @id @default(autoincrement())
+  nama_matakuliah  String
+  sks              Int
 
-  id_dosen        Int
-  dosen           Dosen   @relation(fields: [id_dosen], references: [id])
+  dosen_nidn       Int
+  dosen            Dosen   @relation(fields: [dosen_nidn], references: [nidn])
 
-  penjadwalan     Penjadwalan[]
-  krs             Krs[]
+  penjadwalan      Penjadwalan[]
+  krs              Krs[]
 }
 
 model Penjadwalan {
