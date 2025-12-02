@@ -1,0 +1,78 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  username     String @unique
+  password     String
+  role         String
+
+  mahasiswaId  Int?   @unique
+  mahasiswa    Mahasiswa?  @relation(fields: [mahasiswaId], references: [id])
+}
+
+model Dosen {
+  id            Int    @id @default(autoincrement())
+  nidn          Int    @unique
+  nama_dosen    String
+  // 'L' atau 'P'
+  jenis_kelamin String
+  alamat        String
+
+  matakuliah    Matakuliah[]
+  penjadwalan   Penjadwalan[]
+}
+
+model Mahasiswa {
+  id              Int    @id @default(autoincrement())
+  nim             String @unique
+  nama_mahasiswa  String
+  // 'L' atau 'P'
+  jenis_kelamin   String
+  jurusan         String
+
+  user            User?
+  krs             Krs[]
+}
+
+model Matakuliah {
+  id_matakuliah   Int    @id @default(autoincrement())
+  nama_matakuliah String
+  sks             Int
+
+  id_dosen        Int
+  dosen           Dosen   @relation(fields: [id_dosen], references: [id])
+
+  penjadwalan     Penjadwalan[]
+  krs             Krs[]
+}
+
+model Penjadwalan {
+  id             Int    @id @default(autoincrement())
+  id_dosen       Int
+  id_matakuliah  Int
+  jadwal         String
+
+  tahun_ajaran   String
+  semester       Int
+
+  dosen          Dosen      @relation(fields: [id_dosen], references: [id])
+  matakuliah     Matakuliah @relation(fields: [id_matakuliah], references: [id_matakuliah])
+}
+
+model Krs {
+  id             Int    @id @default(autoincrement())
+  mahasiswa_id   Int
+  matakuliah_id  Int
+
+  mahasiswa      Mahasiswa  @relation(fields: [mahasiswa_id], references: [id])
+  matakuliah     Matakuliah @relation(fields: [matakuliah_id], references: [id_matakuliah])
+
+  @@unique([mahasiswa_id, matakuliah_id])
+}
