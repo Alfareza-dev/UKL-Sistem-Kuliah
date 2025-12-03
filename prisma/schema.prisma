@@ -54,17 +54,18 @@ model Matakuliah {
 }
 
 model Penjadwalan {
-  id             Int    @id @default(autoincrement())
-  id_dosen       Int
-  id_matakuliah  Int
-  jadwal         String
+  id            Int    @id @default(autoincrement())
+  jadwal        String
+  tahun_ajaran  String
+  semester      Int
 
-  tahun_ajaran   String
-  semester       Int
+  dosen_nidn    Int
+  dosen         Dosen   @relation(fields: [dosen_nidn], references: [nidn])
 
-  dosen          Dosen      @relation(fields: [id_dosen], references: [id])
-  matakuliah     Matakuliah @relation(fields: [id_matakuliah], references: [id_matakuliah])
+  matakuliah_id Int
+  matakuliah    Matakuliah @relation(fields: [matakuliah_id], references: [id_matakuliah])
 }
+
 
 model Krs {
   id             Int    @id @default(autoincrement())
